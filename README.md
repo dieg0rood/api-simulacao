@@ -18,10 +18,10 @@ Acessando o diretório do projeto faça a instalação das dependências do proj
   composer install
 ```    
 
-Renomeie o arquivo env
+Copie o arquivo env
 
 ```bash
-  mv .env.example .env
+  cp .env.example .env
 ```  
 
 Para utilizar o servidor do laravel
