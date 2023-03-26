@@ -105,5 +105,4 @@ class SimulationController extends Controller
         $number = number_format($value, 2, ',', '.');
         return 'R$' . $number;
     }
-
 }
