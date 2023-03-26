@@ -1,0 +1,28 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Credit Simulation API",
+        "description": "Teste GoSat",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/simulation/{document}": {
+            "get": {
+                "tags": [
+                    "Simulation"
+                ],
+                "summary": "Returns a list of credit offers",
+                "description": "Returns 3 credit offers ordered from the most advantageous to the least advantageous, based on the interest rate",
+                "operationId": "getSimulationList",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "442": {
+                        "description": "Unprocessable"
+                    }
+                }
+            }
+        }
+    }
+}
