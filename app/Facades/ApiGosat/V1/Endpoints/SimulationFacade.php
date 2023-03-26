@@ -19,6 +19,9 @@ class SimulationFacade extends Facade
       $response = ConnectionApi::post('/simulacao/credito', [
         'cpf' => $cpf,
       ]);
+      if ($response->getStatusCode() !== 200) {
+        throw new \App\Exceptions\DocumentException($response->getBody(), $response->getStatusCode());
+      }
     } catch (RequestException $e) {
       $response = $e->getResponse();
       $errorMessage = $response->getBody()->getContents();
@@ -35,6 +38,9 @@ class SimulationFacade extends Facade
         'instituicao_id' => $instituicao_id,
         'codModalidade' => $codModalidade,  
       ]);
+      if ($response->getStatusCode() !== 200) {
+        throw new \App\Exceptions\OfferException($response->getBody(), $response->getStatusCode());
+      }
     } catch (RequestException $e) {
       $response = $e->getResponse();
       $errorMessage = $response->getBody()->getContents();

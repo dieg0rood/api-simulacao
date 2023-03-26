@@ -6,8 +6,33 @@ use App\Facades\ApiGosat\V1\Endpoints\SimulationFacade;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 
+/**
+ * @OA\Info(
+ *     title="Credit Simulation API",
+ *     version="1.0.0",
+ *     description="Teste GoSat"
+ * )
+ */
+
 class SimulationController extends Controller
 {
+    /**
+     * @OA\Get(
+     *      path="/simulation/{document}",
+     *      operationId="getSimulationList",
+     *      tags={"Simulation"},
+     *      summary="Returns a list of credit offers",
+     *      description="Returns 3 credit offers ordered from the most advantageous to the least advantageous, based on the interest rate",
+     *      @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *       ),
+     *      @OA\Response(
+     *          response=442,
+     *          description="Unprocessable",
+     *      )
+     *     )
+     */
     private string $cpf;
     private Collection $instituicoes;
     private array $allOffers;
@@ -42,7 +67,7 @@ class SimulationController extends Controller
                 'instituicaoFinanceira' => $offer["instituicaoFinanceira"],
                 'modalidadeCredito' => $offer["modalidadeCredito"],
                 'valorAPagar' => '-',
-                'valorSolicitado' => $this->formatValueReal($offer["valorMin"]) . ' até ' . $this->formatValueReal($offer["valorMax"]) ,
+                'valorSolicitado' => $this->formatValueReal($offer["valorMin"]) . ' até ' . $this->formatValueReal($offer["valorMax"]),
                 'taxaJuros' => $offer["jurosMes"] * 100 . '% Mês',
                 'qntParcelas' => $offer["QntParcelaMin"] . ' até ' . $offer["QntParcelaMax"],
             ];
