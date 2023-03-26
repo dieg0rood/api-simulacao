@@ -45,6 +45,7 @@ Para utilizar o servidor do laravel
 Para rodar os testes, rode os seguintes comandos na raiz do projeto
 
 ```bash
+  mkdir tests/Unit   
   alias sail="vendor/bin/sail"
   sail up -d 
   sail test
