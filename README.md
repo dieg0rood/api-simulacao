@@ -31,7 +31,6 @@ Para utilizar o servidor do laravel
 ```  
 
 
-
 ## Documentação da API
 
 #### A documentação está disponível em
@@ -51,3 +50,23 @@ Para rodar os testes, rode os seguintes comandos na raiz do projeto
   sail test
 ```
 
+
+#### Troubleshooting
+
+Caso tenha erros semelhante ao abaixo:
+
+```bash
+Error response from daemon: driver failed programming external connectivity on endpoint api-simulacao-laravel.test-1 (e1eaee2fe9d0ba510025c0acfc4d5d38a7de06175a339d3d5642e58da913387b): Error starting userland proxy: listen tcp4 0.0.0.0:80: bind: address already in use
+```
+
+Rode o seguinte comando para visualizar qual serviço está usando a porta 80
+
+```bash
+  sudo lsof -i :80
+```
+
+E para liberar a porta, localize o PID (ID do processo), e rode o seguinte comando para finaliza-lo:
+
+```bash
+  sudo kill PID
+```

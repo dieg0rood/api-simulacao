@@ -6,14 +6,46 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/simulation/{document}": {
+        "/simulation": {
             "get": {
                 "tags": [
                     "Simulation"
                 ],
                 "summary": "Returns a list of credit offers",
-                "description": "Returns 3 credit offers ordered from the most advantageous to the least advantageous, based on the interest rate",
+                "description": "Returns 3 credit offers ordered from the most advantageous to the least advantageous, based on the amount to pay",
                 "operationId": "getSimulationList",
+                "parameters": [
+                    {
+                        "name": "cpf",
+                        "in": "query",
+                        "description": "CPF number",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "123.456.789-00"
+                    },
+                    {
+                        "name": "valor",
+                        "in": "query",
+                        "description": "Value requested for credit",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": "5000"
+                    },
+                    {
+                        "name": "parcelas",
+                        "in": "query",
+                        "description": "Number of installments for credit",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": "12"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"

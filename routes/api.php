@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/simulation/{cpf}',[SimulationController::class,'show']);
+Route::get('/simulation',[SimulationController::class,'show']);
