@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Facades\ApiGosat\V1\Endpoints\SimulationFacade;
+use App\Helpers\Offer\Filter;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 /**
@@ -17,30 +19,66 @@ use Illuminate\Support\Collection;
 class SimulationController extends Controller
 {
     /**
-     * @OA\Get(
-     *      path="/simulation/{document}",
-     *      operationId="getSimulationList",
-     *      tags={"Simulation"},
-     *      summary="Returns a list of credit offers",
-     *      description="Returns 3 credit offers ordered from the most advantageous to the least advantageous, based on the interest rate",
-     *      @OA\Response(
-     *          response=200,
-     *          description="OK",
-     *       ),
-     *      @OA\Response(
-     *          response=442,
-     *          description="Unprocessable",
-     *      )
-     *     )
-     */
+ * @OA\Get(
+ *      path="/simulation",
+ *      operationId="getSimulationList",
+ *      tags={"Simulation"},
+ *      summary="Returns a list of credit offers",
+ *      description="Returns 3 credit offers ordered from the most advantageous to the least advantageous, based on the amount to pay",
+ *      @OA\Parameter(
+ *          name="cpf",
+ *          in="query",
+ *          description="CPF number",
+ *          required=true,
+ *          example="123.456.789-00",
+ *          @OA\Schema(
+ *              type="string"
+ *          )
+ *      ),
+ *      @OA\Parameter(
+ *          name="valor",
+ *          in="query",
+ *          description="Value requested for credit",
+ *          required=true,
+ *          example="5000",
+ *          @OA\Schema(
+ *              type="integer"
+ *          )
+ *      ),
+ *      @OA\Parameter(
+ *          name="parcelas",
+ *          in="query",
+ *          description="Number of installments for credit",
+ *          required=true,
+ *          example="12",
+ *          @OA\Schema(
+ *              type="integer"
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=200,
+ *          description="OK",
+ *       ),
+ *      @OA\Response(
+ *          response=442,
+ *          description="Unprocessable",
+ *      )
+ * )
+ */
+
     private string $cpf;
+    private int $parcelas;
+    private string $valor;
     private Collection $instituicoes;
     private array $allOffers;
-    public function show($cpf)
+    public function show(Request $request)
     {
-        $this->setDocument($cpf);
-        $this->setInstitutions(collect(SimulationFacade::credit($cpf)));
+        $this->setValue($request->input('valor'));
+        $this->setInstallments($request->input('parcelas'));
+        $this->setDocument($request->input('cpf'));
+        $this->setInstitutions(collect(SimulationFacade::credit($this->getDocument())));
         $this->setAllOffers($this->getInstitutions());
+
         return response()->json($this->getResponse());
     }
     private function returnAll($offer, $modalidade, $institution)
@@ -61,29 +99,22 @@ class SimulationController extends Controller
     private function getResponse()
     {
         $response = [];
-        $offers = $this->orderByJuros($this->getAllOffers());
+        $offersFilter = (new Filter($this->getAllOffers(),$this->getValue(),$this->getInstallments()));
+        $offers = $offersFilter->filterValue()
+                    ->filterInstallments()
+                    ->orderByMostAdvantageous()
+                    ->getOffer();
         foreach ($offers as $offer) {
             $response[] = [
                 'instituicaoFinanceira' => $offer["instituicaoFinanceira"],
                 'modalidadeCredito' => $offer["modalidadeCredito"],
-                'valorAPagar' => '-',
-                'valorSolicitado' => $this->formatValueReal($offer["valorMin"]) . ' até ' . $this->formatValueReal($offer["valorMax"]),
+                'valorAPagar' => $offer['valorAPagar'],
+                'valorSolicitado' => $offersFilter->formatValueReal($this->getValue()),
                 'taxaJuros' => $offer["jurosMes"] * 100 . '% Mês',
-                'qntParcelas' => $offer["QntParcelaMin"] . ' até ' . $offer["QntParcelaMax"],
+                'qntParcelas' => $this->getInstallments(),
             ];
         }
         return $response;
-    }
-
-    private function orderByJuros($offers)
-    {
-        usort($offers, function ($a, $b) {
-            if ($a['jurosMes'] == $b['jurosMes']) {
-                return 0;
-            }
-            return ($a['jurosMes'] < $b['jurosMes']) ? -1 : 1;
-        });
-        return $offers;
     }
 
     private function setDocument($cpf)
@@ -94,6 +125,26 @@ class SimulationController extends Controller
     private function getDocument()
     {
         return $this->cpf;
+    }
+
+    private function setValue($valor)
+    {
+        $this->valor = $valor;
+    }
+
+    private function getValue()
+    {
+        return $this->valor;
+    }
+
+    private function setInstallments($parcelas)
+    {
+        $this->parcelas = $parcelas;
+    }
+
+    private function getInstallments()
+    {
+        return $this->parcelas;
     }
 
     private function setInstitutions(Collection $instituicoes)
@@ -125,9 +176,4 @@ class SimulationController extends Controller
         return $this->allOffers;
     }
 
-    private function formatValueReal($value)
-    {
-        $number = number_format($value, 2, ',', '.');
-        return 'R$' . $number;
-    }
 }
