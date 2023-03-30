@@ -6,7 +6,6 @@ use App\Business\API\Simulation\Api;
 use App\Business\API\Simulation\Database;
 use App\Helpers\FormatValues;
 
-
 class Simulation
 {
     public function getFromApi($document, $value, $installments, $simulationId)
