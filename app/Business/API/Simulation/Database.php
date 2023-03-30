@@ -18,7 +18,7 @@ class Database extends SimulationBusiness
   private function getOffersFromDatabase($simulationId)
   {
     $allOffersDatabase = array();
-    $offersSaved = Offer::where('simulation_id', $simulationId)->get();
+    $offersSaved = Offer::where('simulation_id', $simulationId)->orderBy('valorAPagar','asc')->get();
     foreach ($offersSaved as $offer) {
       $allOffersDatabase[] = [
         'instituicaoFinanceira' => $offer->instituicaoFinanceira,

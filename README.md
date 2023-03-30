@@ -3,6 +3,9 @@
 
 Projeto tem objetivo de repassar ao cliente ofertas de crédito de forma ordenada da mais vantajosa para a menos, consumindo a API da gosat e realizando o tratamento dos dados. 
 
+A cada nova consulta de uma combinação única de CPF + Valor Solicitado + Quantidade de Parcela, os dados de simulação do cliente e de ofertas fornecidas pela API são salvas no banco de dados, para que caso seja realizada a mesma consulta, o resultado será mais feita diretamente dos dados locais.
+
+É executado um fíltro para que somente sejam apresentados resultados de propostas compativeis com o Valor solicitado e Quantidade de parcelas, dito isso, a quantidade de resultados pode variar a depender da consulta feita.
 
 ## Instalação
 
@@ -12,7 +15,7 @@ Faça o clone do projeto em uma pasta de sua preferência
   git clone git@github.com:dieg0rood/api-simulacao.git
 ```
 
-Acessando o diretório do projeto faça a instalação das dependências do projeto
+Acessando o diretório raiz do projeto faça a instalação das dependências do projeto
 
 ```bash
   composer install
@@ -22,13 +25,30 @@ Copie o arquivo env
 
 ```bash
   cp .env.example .env
-```  
+```
+
+Crie o arquivo de banco de dados do sqlite
+(Caso o terminal fique piscando, dê CtrlC)
+
+```bash
+  cat > database/database.sqlite
+``` 
+
+Ainda na raiz do projeto, gere o banco de dados com suas migrations, segue exemplo utilizando o sail
+
+```bash
+  alias sail="vendor/bin/sail"
+  sail up -d 
+  sail artisan migrate
+```
 
 Para utilizar o servidor do laravel
 
 ```bash
   php artisan serve
 ```  
+
+Após isso a API já estará disponível para consulta
 
 
 ## Documentação da API
@@ -42,11 +62,12 @@ Para utilizar o servidor do laravel
 ## Rodando os testes
 
 Para rodar os testes, rode os seguintes comandos na raiz do projeto
+*Comandos para usar somente se o sail ainda não estiver Up
 
 ```bash
   mkdir tests/Unit   
-  alias sail="vendor/bin/sail"
-  sail up -d 
+  *alias sail="vendor/bin/sail"
+  *sail up -d 
   sail test
 ```
 
