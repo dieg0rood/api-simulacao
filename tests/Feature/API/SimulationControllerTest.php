@@ -14,7 +14,7 @@ class SimulationControllerTest extends TestCase
      */
     public function test_simulation_get_endpoint(): void
     {
-        $response = $this->getJson('/api/simulation/11111111111');
+        $response = $this->getJson('/api/simulation?cpf=12312312312&valor=15000&parcelas=24');
 
         $response->assertStatus(200);
         $response->assertJsonCount(3);
@@ -34,7 +34,7 @@ class SimulationControllerTest extends TestCase
                 '0.valorAPagar' => 'string',
                 '0.valorSolicitado' => 'string',
                 '0.taxaJuros' => 'string',
-                '0.qntParcelas' => 'string'
+                '0.qntParcelas' => 'integer'
             ]);
         });
     }

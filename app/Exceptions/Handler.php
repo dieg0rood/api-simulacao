@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
 {
-    if ($exception instanceof DocumentException || $exception instanceof OfferException) {
+    if ($exception instanceof DocumentException || $exception instanceof OfferException || $exception instanceof NoResultException) {
         return response()->json([
             'error' => $exception->getMessage(),
         ], $exception->getCode());
