@@ -38,7 +38,7 @@ class Simulation
                 'valorAPagar' => (new FormatValues())::formatValueReal($offer['valorAPagar']),
                 'valorSolicitado' => (new FormatValues())::formatValueReal($value),
                 'taxaJuros' => $offer["jurosMes"] * 100 . '% Mês',
-                'qntParcelas' => $installments,
+                'qntParcelas' => intval($installments),
             ];
         }
         return $response;
