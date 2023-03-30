@@ -4,7 +4,6 @@ namespace App\Business;
 
 trait Business
 {
-
     protected $repository;
     protected $repositoryClass;
 
