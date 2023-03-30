@@ -9,7 +9,7 @@ class Filter
   private $value;
   private $interestRate;
 
-  public function __construct($offer, $value, $installments)
+  public function __construct(array $offer, $value, $installments)
   {
     $this->offer = $offer;
     $this->value = $value;
@@ -22,15 +22,16 @@ class Filter
     return $this->offer;
   }
 
-  private function calcAmountToPay()
+  public function calcAmountToPay()
   {
     foreach ($this->offer as $key => $oneOffer) {
       $valorTotal = $this->calcularPrice($this->value, $oneOffer['jurosMes'], $this->installments);
-       $this->offer[$key]['valorAPagar'] = $this->formatValueReal($valorTotal);
+       $this->offer[$key]['valorAPagar'] = $valorTotal;
     }
+    return $this;
   }
 
-  function calcularPrice($capital, $taxa, $periodos) {
+  public function calcularPrice($capital, $taxa, $periodos) {
     $juros = (1 + $taxa) ** $periodos;
     $prestacao = ($capital * ($taxa * $juros)) / ($juros - 1);
     $saldo_devedor = $capital;
@@ -77,10 +78,5 @@ class Filter
     });
     return $this;
   }
-
-  public function formatValueReal($value)
-  {
-      $number = number_format($value, 2, ',', '.');
-      return 'R$' . $number;
-  }
+ 
 }
