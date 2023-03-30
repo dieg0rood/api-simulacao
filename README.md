@@ -3,7 +3,7 @@
 
 Projeto tem objetivo de repassar ao cliente ofertas de crédito de forma ordenada da mais vantajosa para a menos, consumindo a API da gosat e realizando o tratamento dos dados. 
 
-A cada nova consulta de uma combinação única de CPF + Valor Solicitado + Quantidade de Parcela, os dados de simulação do cliente e de ofertas fornecidas pela API são salvas no banco de dados, para que caso seja realizada a mesma consulta, o resultado será mais feita diretamente dos dados locais.
+A cada nova consulta de uma combinação única de CPF + Valor Solicitado + Quantidade de Parcela, os dados de simulação do cliente e de ofertas fornecidas pela API são salvas no banco de dados, para que caso seja realizada a mesma consulta, o resultado será retornado direto do banco de dados.
 
 É executado um fíltro para que somente sejam apresentados resultados de propostas compativeis com o Valor solicitado e Quantidade de parcelas, dito isso, a quantidade de resultados pode variar a depender da consulta feita.
 
