@@ -6,7 +6,6 @@ use App\Business\API\Simulation\Api;
 use App\Business\API\Simulation\Database;
 use App\Helpers\FormatValues;
 
-
 class Simulation
 {
     public function getFromApi($document, $value, $installments, $simulationId)
@@ -38,7 +37,7 @@ class Simulation
                 'valorAPagar' => (new FormatValues())::formatValueReal($offer['valorAPagar']),
                 'valorSolicitado' => (new FormatValues())::formatValueReal($value),
                 'taxaJuros' => $offer["jurosMes"] * 100 . '% Mês',
-                'qntParcelas' => $installments,
+                'qntParcelas' => intval($installments),
             ];
         }
         return $response;
