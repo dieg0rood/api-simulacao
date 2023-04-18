@@ -71,6 +71,13 @@ Para rodar os testes, rode os seguintes comandos na raiz do projeto
   sail test
 ```
 
+#### Rodando a Aplicação
+
+No Swagger está disponível a rota para realizar as consultas.
+- CPFs disponíveis:
+111.111.111-11
+123.123.123-12
+222.222.222-22
 
 #### Troubleshooting
 
