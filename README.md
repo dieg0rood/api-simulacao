@@ -73,11 +73,20 @@ Para rodar os testes, rode os seguintes comandos na raiz do projeto
 
 #### Rodando a Aplicação
 
-No Swagger está disponível a rota para realizar as consultas.
-- CPFs disponíveis:
+CPFs disponíveis:
 - 111.111.111-11
 - 123.123.123-12
 - 222.222.222-22
+
+Exemplo de dados:
+- cpf: 111.111.111-11
+- valor: R$ 10.000,00
+- parcelas: 24x
+
+Requisição:
+```http
+http://localhost:8000/api/simulation?cpf=11111111111&valor=10000&parcelas=24
+```  
 
 #### Troubleshooting
 
